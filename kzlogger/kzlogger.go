@@ -90,8 +90,9 @@ func (l *Logger) CloneWithAttrs(attrs ...lga.Attr) *Logger {
 	lvl := &slog.LevelVar{}
 	lvl.Set(l.LevelVar.Level())
 	ret := &Logger{
-		Logger:   slog.New(l.Logger.Handler().WithAttrs(attrs)),
-		LevelVar: lvl,
+		Logger:        slog.New(l.Logger.Handler().WithAttrs(attrs)),
+		LevelVar:      lvl,
+		InCtxAttrsKey: l.InCtxAttrsKey,
 	}
 	return ret
 }
