@@ -4,6 +4,7 @@ package lga
 import (
 	"fmt"
 	"log/slog"
+	"runtime"
 
 	"github.com/Kirill-Znamenskiy/kzlogger/callers"
 )
@@ -34,6 +35,14 @@ var (
 
 func GroupAttrs(key string, attrs ...Attr) Attr {
 	return New(key, slog.GroupValue(attrs...))
+}
+
+func RuntimeFrames(key string, frames []*runtime.Frame) Attr {
+	attrs := make([]slog.Attr, 0, len(frames))
+	for _, frame := range frames {
+		attrs = append(attrs, slog.String(fmt.Sprintf("%s:%d", frame.File, frame.Line), frame.Function))
+	}
+	return GroupAttrs(key, attrs...)
 }
 
 func Err(err error) Attr {
